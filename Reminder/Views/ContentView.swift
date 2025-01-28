@@ -56,7 +56,8 @@ struct ContentView: View {
                             }
                             if current.isDateInToday(work.dueDate) {
                                 counts.todayCount += 1
-                            } else if Date().compare(work.dueDate) == .orderedAscending {
+                            }
+                            if work.dueDate > Date() {
                                 counts.expectedDayCount += 1
                             } else {}
                         }
@@ -64,7 +65,7 @@ struct ContentView: View {
                     
                     VStack {
                         Button(action: {}, label: {
-                            NavigationLink(destination: DetailView(tag: 0)) {
+//                            NavigationLink(destination: DetailView(tag: 0)) {
                                 Image(systemName: "trash.circle.fill")
                                     .resizable()
                                     .foregroundStyle(.gray)
@@ -75,7 +76,7 @@ struct ContentView: View {
                                 Spacer()
                                 Text("0")
                                     .foregroundStyle(.black)
-                            }
+//                            }
                         })
                         .padding()
                         .frame(width: 380, height: 50)
