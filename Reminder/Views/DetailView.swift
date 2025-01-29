@@ -35,7 +35,10 @@ struct DetailView: View {
             title = "제목"
         }
         
-        _works = Query(filter: nil, sort: [SortDescriptor(\Work.dueDate)])
+        let predicate = #Predicate<Work> {
+            $0.isDeleted == false
+        }
+        _works = Query(filter: predicate, sort: [SortDescriptor(\Work.dueDate)])
     }
     
     var body: some View {
@@ -80,7 +83,7 @@ struct DetailView: View {
     private func deleteWorks(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(works[index])
+                works[index].isDeleted = true
             }
         }
     }

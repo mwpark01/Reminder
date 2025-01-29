@@ -12,4 +12,5 @@ class Counts: ObservableObject {
     @Published var expectedDayCount: Int = 0
     @Published var allCount: Int = 0
     @Published var completedWorkCount: Int = 0
+    @Published var deletedWorkCount: Int = 0
 }

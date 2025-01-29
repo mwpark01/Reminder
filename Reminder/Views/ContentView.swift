@@ -45,44 +45,49 @@ struct ContentView: View {
                     }
                     .onAppear {
                         let current = Calendar.current
-                        counts.allCount = works.count
+                        counts.allCount = 0
                         counts.completedWorkCount = 0
                         counts.expectedDayCount = 0
                         counts.todayCount = 0
-                        
+                        counts.deletedWorkCount = 0
+
                         for work in works {
-                            if work.isCompleted {
-                                counts.completedWorkCount += 1
+                            if work.isDeleted {
+                                counts.deletedWorkCount += 1
+                            } else {
+                                counts.allCount += 1
+                                if work.isCompleted {
+                                    counts.completedWorkCount += 1
+                                }
+                                if current.isDateInToday(work.dueDate) {
+                                    counts.todayCount += 1
+                                }
+                                if work.dueDate > Date() {
+                                    counts.expectedDayCount += 1
+                                }
                             }
-                            if current.isDateInToday(work.dueDate) {
-                                counts.todayCount += 1
-                            }
-                            if work.dueDate > Date() {
-                                counts.expectedDayCount += 1
-                            } else {}
                         }
                     }
                     
                     VStack {
                         Button(action: {}, label: {
-//                            NavigationLink(destination: DetailView(tag: 0)) {
+                            NavigationLink(destination: DeleteView()) {
                                 Image(systemName: "trash.circle.fill")
                                     .resizable()
                                     .foregroundStyle(.gray)
                                     .frame(width: 30, height: 30)
                                 
-                                Text("삭제된 항목")
+                                Text("최근 삭제된 항목")
                                     .foregroundStyle(.gray)
                                 Spacer()
-                                Text("0")
+                                Text(String(counts.deletedWorkCount))
                                     .foregroundStyle(.black)
-//                            }
+                            }
                         })
                         .padding()
                         .frame(width: 380, height: 50)
                         .background(.white)
                         .clipShape(.rect(cornerRadius: 10))
-                        
                     }
                     Spacer()
                 }

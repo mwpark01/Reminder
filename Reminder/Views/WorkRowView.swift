@@ -14,9 +14,10 @@ struct WorkRowView: View {
     @State private var isEditing = false
     @State private var content: String = ""
     @State private var isEditingDetail: Bool = false
-    
-    init(work: Work) {
+    @State private var isDeleting: Bool
+    init(work: Work, isDeleting: Bool = false) {
         self.work = work
+        self.isDeleting = isDeleting
     }
     
     var body: some View {
@@ -41,14 +42,13 @@ struct WorkRowView: View {
                 // 버튼 씹힘 문제 해결
                 .buttonStyle(.borderless)
                 
-                if !isEditing {
+                if !isEditing || isDeleting {
                     Text(work.title)
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundStyle(work.isCompleted ? .gray : .black)
                         .onTapGesture {
                             isEditing = true
-                            //content = work.title
                         }
                     Spacer()
                 } else {
