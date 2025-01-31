@@ -75,7 +75,7 @@ struct WorkRowView: View {
                 }
             }
             .sheet(isPresented: $isEditingDetail) {
-                EditWorkView(work: work)
+                EditWorkView(_work: work)
             }
             .onChange(of: work.title) {
                 content = work.title

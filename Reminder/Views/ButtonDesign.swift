@@ -6,22 +6,22 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ButtonDesign: View {
     @State private var content: String
     @State private var color: Color
     @State private var imageString: String
     @State private var tag: Int
-//    @State private var detailView: DetailView
     
     @EnvironmentObject var counts: Counts
+    @Query private var works: [Work]
     
     init(content: String, color: Color, imageString: String, tag: Int) {
         self.content = content
         self.color = color
         self.imageString = imageString
         self.tag = tag
-//        detailView = DetailView(tag: tag)
     }
     
     var body: some View {
@@ -58,7 +58,7 @@ struct ButtonDesign: View {
                     }
                 }
                 .padding()
-                .frame(width: 180, height: 100)
+                .frame(width: 190, height: 100)
                 .background(.white)
                 .clipShape(.rect(cornerRadius: 10))
             }
@@ -67,3 +67,7 @@ struct ButtonDesign: View {
     }
 }
 
+#Preview {
+    ButtonDesign(content: "오늘", color: .blue, imageString: "calendar.circle.fill", tag: 0)
+        .environmentObject(Counts())
+}

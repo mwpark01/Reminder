@@ -14,6 +14,15 @@ struct ContentView: View {
     
     @EnvironmentObject var counts: Counts
     
+    @State private var isAddingWork: Bool = false
+    @State private var isAddingList: Bool = false
+    
+    @State private var buttonContents: [String] = ["오늘", "예정", "전체", "완료됨"]
+    @State private var buttonColors: [Color] = [.blue, .red, .gray, .gray]
+    @State private var imageStrings: [String] = ["calendar.circle.fill", "calendar.circle.fill", "tray.circle.fill", "checkmark.circle.fill"]
+    private var gridItems = [GridItem(.flexible()),
+                             GridItem(.flexible())]
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -26,13 +35,11 @@ struct ContentView: View {
                         .padding(.top)
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                    HStack {
-                        ButtonDesign(content: "오늘", color: .blue, imageString: "calendar.circle.fill", tag: 0)
-                        ButtonDesign(content: "예정", color: .red, imageString: "calendar.circle.fill", tag: 1)
-                    }
-                    HStack {
-                        ButtonDesign(content: "전체", color: .gray, imageString: "tray.circle.fill", tag: 2)
-                        ButtonDesign(content: "완료됨", color: .gray, imageString: "checkmark.circle.fill", tag: 3)
+                    
+                    LazyVGrid(columns: gridItems, spacing: 1) {
+                        ForEach((0...3), id: \.self) { index in
+                            ButtonDesign(content: buttonContents[index], color: buttonColors[index], imageString: imageStrings[index], tag: index)
+                        }
                     }
                     
                     HStack {
@@ -42,31 +49,6 @@ struct ContentView: View {
                             .fontWeight(.bold)
                             .padding()
                         Spacer()
-                    }
-                    .onAppear {
-                        let current = Calendar.current
-                        counts.allCount = 0
-                        counts.completedWorkCount = 0
-                        counts.expectedDayCount = 0
-                        counts.todayCount = 0
-                        counts.deletedWorkCount = 0
-
-                        for work in works {
-                            if work.isDeleted {
-                                counts.deletedWorkCount += 1
-                            } else {
-                                counts.allCount += 1
-                                if work.isCompleted {
-                                    counts.completedWorkCount += 1
-                                }
-                                if current.isDateInToday(work.dueDate) {
-                                    counts.todayCount += 1
-                                }
-                                if work.dueDate > Date() {
-                                    counts.expectedDayCount += 1
-                                }
-                            }
-                        }
                     }
                     
                     VStack {
@@ -90,13 +72,36 @@ struct ContentView: View {
                         .clipShape(.rect(cornerRadius: 10))
                     }
                     Spacer()
+                    Spacer()
+                    HStack {
+                        Button(action: {
+                            isAddingWork = true
+                        }, label: {
+                            Label("새로운 미리 알림", systemImage: "plus.circle.fill")
+                        })
+                        .padding(.leading)
+                        Spacer()
+                        Button(action: {
+                            isAddingList = true
+                        }, label: {
+                            Text("목록 추가")
+                        })
+                        .padding(.trailing)
+                    }
+                    .padding(.bottom)
+                    .padding(.bottom)
                 }
+                .sheet(isPresented: $isAddingWork) {
+                    AddWorkView()
+                }
+                .sheet(isPresented: $isAddingList) {
+                    AddMyListView()
+                }
+                
             }
             .ignoresSafeArea()
         }
-        
     }
-    
 }
 
 #Preview {
@@ -104,5 +109,3 @@ struct ContentView: View {
         .modelContainer(for: Work.self, inMemory: true)
         .environmentObject(Counts())
 }
-
-

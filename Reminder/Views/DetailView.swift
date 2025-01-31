@@ -56,7 +56,7 @@ struct DetailView: View {
                     ForEach(filtering(tag: tag)) { work in
                             WorkRowView(work: work)
                             .swipeActions(edge: .leading) {
-                                NavigationLink(destination: EditWorkView(work: work, editMode: 1)) {
+                                NavigationLink(destination: EditWorkView(_work: work, editMode: 1)) {
                                     Text("Edit")
                                 }
                                 .tint(.yellow)

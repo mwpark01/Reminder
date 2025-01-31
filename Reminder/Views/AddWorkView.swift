@@ -14,7 +14,7 @@ struct AddWorkView: View {
     @Environment(\.dismiss) private var dismiss
     
     @EnvironmentObject var counts: Counts
-    
+    @Query private var works: [Work]
     @State private var title: String
     @State private var memo: String
     @State private var dueDate: Date
@@ -51,12 +51,40 @@ struct AddWorkView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("완료") {
                         if title.isEmpty {
-                            title = "새로운 미리 알림"
+                            title = "새로운 미리 알림 \(counts.allCount + 1)"
                         }
                         let work = Work(title: title, memo: memo, dueDate: dueDate)
                         modelContext.insert(work)
+                        reloadData()
                         dismiss()
                     }
+                }
+            }
+        }
+    }
+    
+    // 값 변경 함수
+    func reloadData() {
+        let current = Calendar.current
+        counts.allCount = 0
+        counts.completedWorkCount = 0
+        counts.expectedDayCount = 0
+        counts.todayCount = 0
+        counts.deletedWorkCount = 0
+        
+        for work in works {
+            if work.isDeleted {
+                counts.deletedWorkCount += 1
+            } else {
+                counts.allCount += 1
+                if work.isCompleted {
+                    counts.completedWorkCount += 1
+                }
+                if current.isDateInToday(work.dueDate) {
+                    counts.todayCount += 1
+                }
+                if work.dueDate > Date() {
+                    counts.expectedDayCount += 1
                 }
             }
         }
@@ -65,4 +93,5 @@ struct AddWorkView: View {
 
 #Preview {
     AddWorkView()
+        .environmentObject(Counts())
 }
