@@ -6,17 +6,21 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct AddMyListView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     
     @State private var colors: [Color] = [.red, .orange, .yellow, .green, .blue, .indigo, .purple, .pink, .gray]
-    @State private var systemImages: [String] = ["face.smiling", "list.bullet", "bookmark.fill", "gift.fill", "birthday.cake.fill"]
+    @State private var systemImages: [String] = ["face.smiling", "list.bullet", "bookmark.fill", "gift.fill", "birthday.cake.fill", "graduationcap.fill", "backpack.fill", "pencil.and.ruler.fill", "document.fill"]
     
     @State private var setSystemImages: String = "face.smiling"
     @State private var setColor: Color = .blue
     @State private var content: String = ""
     
-    @Environment(\.dismiss) private var dismiss
+    @Query private var works: [Work]
+    @Query private var myLists: [MyList]
     
     var body: some View {
         NavigationStack {
@@ -24,8 +28,7 @@ struct AddMyListView: View {
                 Section {
                     HStack {
                         Spacer()
-                        Image(systemName: "circle.fill")
-                            .resizable()
+                        Circle()
                             .foregroundColor(setColor)
                             .frame(width: 70, height: 70)
                             .overlay(content: {
@@ -45,6 +48,10 @@ struct AddMyListView: View {
                     .padding(10)
                     .background(.gray.opacity(0.2))
                     .clipShape(.rect(cornerRadius: 10))
+                    .onAppear {
+                        // 지우는 버튼 추가
+                        UITextField.appearance().clearButtonMode = .whileEditing
+                    }
                 }
                 
                 Section {
@@ -75,11 +82,17 @@ struct AddMyListView: View {
                             Button(action: {
                                 setSystemImages = systemImage
                             }, label: {
-                                Image(systemName: systemImage)
-                                    .resizable()
-                                    .foregroundStyle(.gray)
-                                    .scaledToFit()
+                                Circle()
+                                    .fill(.gray)
+                                    .opacity(0.3)
                                     .frame(width: 30, height: 30)
+                                    .overlay(content: {
+                                        Image(systemName: systemImage)
+                                            .resizable()
+                                            .foregroundStyle(.gray)
+                                            .scaledToFit()
+                                            .frame(width: 20, height: 20)
+                                    })
                             })
                             .buttonStyle(.borderless)
                             .overlay(content: {
@@ -92,7 +105,6 @@ struct AddMyListView: View {
                         }
                     }
                 }
-                
             }
             .navigationTitle("새로운 목록")
             .toolbar {
@@ -103,6 +115,9 @@ struct AddMyListView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("완료") {
+                        // Color 값을 String으로 바꿔야함.
+                        let myList = MyList(content: content, setColor: "color", setSystemImages: setSystemImages)
+                        modelContext.insert(myList)
                         dismiss()
                     }
                     .disabled(content.isEmpty)
@@ -115,20 +130,4 @@ struct AddMyListView: View {
     AddMyListView()
 }
 
-struct ExtractedView: View {
-    @State private var color: Color
-    
-    init(color: Color) {
-        self.color = color
-    }
-    
-    var body: some View {
-        Button(action: {
-            
-        }, label: {
-            Circle()
-                .fill(color)
-                .frame(width: 30, height: 30)
-        })
-    }
-}
+

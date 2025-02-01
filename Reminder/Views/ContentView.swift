@@ -10,6 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    
     @Query private var works: [Work]
     
     @EnvironmentObject var counts: Counts
@@ -22,7 +23,6 @@ struct ContentView: View {
     @State private var imageStrings: [String] = ["calendar.circle.fill", "calendar.circle.fill", "tray.circle.fill", "checkmark.circle.fill"]
     private var gridItems = [GridItem(.flexible()),
                              GridItem(.flexible())]
-    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -47,32 +47,17 @@ struct ContentView: View {
                             .foregroundStyle(.black)
                             .font(.title)
                             .fontWeight(.bold)
-                            .padding()
+                            .padding(.leading)
                         Spacer()
                     }
                     
                     VStack {
-                        Button(action: {}, label: {
-                            NavigationLink(destination: DeleteView()) {
-                                Image(systemName: "trash.circle.fill")
-                                    .resizable()
-                                    .foregroundStyle(.gray)
-                                    .frame(width: 30, height: 30)
-                                
-                                Text("최근 삭제된 항목")
-                                    .foregroundStyle(.gray)
-                                Spacer()
-                                Text(String(counts.deletedWorkCount))
-                                    .foregroundStyle(.black)
-                            }
-                        })
-                        .padding()
-                        .frame(width: 380, height: 50)
-                        .background(.white)
-                        .clipShape(.rect(cornerRadius: 10))
+                        MyListView()
+                        RecentDeletedView()
                     }
                     Spacer()
                     Spacer()
+                    
                     HStack {
                         Button(action: {
                             isAddingWork = true
@@ -106,6 +91,8 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Work.self, inMemory: true)
+        .modelContainer(for: [Work.self, MyList.self], inMemory: true)
         .environmentObject(Counts())
 }
+
+

@@ -14,10 +14,14 @@ struct AddWorkView: View {
     @Environment(\.dismiss) private var dismiss
     
     @EnvironmentObject var counts: Counts
+    
     @Query private var works: [Work]
+    @Query private var myLists: [MyList]
+    
     @State private var title: String
     @State private var memo: String
     @State private var dueDate: Date
+    @State private var selectedMyList: MyList?
     
     init(title: String = "", memo: String = "", dueDate: Date = Date()) {
         self.title = title
@@ -32,6 +36,7 @@ struct AddWorkView: View {
                     TextField("제목", text: $title)
                     TextField("메모", text: $memo)
                 }
+                
                 Section {
                     DatePicker("마감일",
                                selection: Binding(get: {
@@ -39,6 +44,13 @@ struct AddWorkView: View {
                     }, set: {
                         dueDate = $0
                     }))
+                }
+                
+                Section {
+                    Picker("목록", selection: $selectedMyList) {
+                        Text("선택안함").tag(Optional<MyList>.none)
+
+                    }
                 }
             }
             .navigationTitle("일정 추가")
@@ -54,6 +66,7 @@ struct AddWorkView: View {
                             title = "새로운 미리 알림 \(counts.allCount + 1)"
                         }
                         let work = Work(title: title, memo: memo, dueDate: dueDate)
+                        
                         modelContext.insert(work)
                         reloadData()
                         dismiss()

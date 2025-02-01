@@ -16,7 +16,7 @@ final class Work {
     var isDeleted: Bool
     var dueDate: Date
     var createdAt: Date
-
+    
     init(title: String = "",
          memo: String = "",
          isCompleted: Bool = false,

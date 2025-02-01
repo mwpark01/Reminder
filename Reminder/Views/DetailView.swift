@@ -97,9 +97,10 @@ struct DetailView: View {
                 return $0.dueDate > Date()
             case 3:
                 return $0.isCompleted == true
+            case 4:
+                return true
             default:
                 return true
-                
             }
         }
         return filteredWorks

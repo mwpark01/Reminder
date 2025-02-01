@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct WorkRowView: View {
-    //    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var count: Counts
     @State var work: Work
     @State private var isEditing = false
@@ -25,12 +24,6 @@ struct WorkRowView: View {
             HStack {
                 Button(action: {
                     work.isCompleted = !work.isCompleted
-                    
-                    if work.isCompleted {
-                        count.completedWorkCount += 1
-                    } else {
-                        count.completedWorkCount -= 1
-                    }
                 }, label: {
                     Image(systemName: work.isCompleted ? "circlebadge.fill" :"circlebadge")
                         .resizable()
@@ -80,7 +73,6 @@ struct WorkRowView: View {
             .onChange(of: work.title) {
                 content = work.title
             }
-            
             HStack {
                 Text(work.dueDate, format: Date.FormatStyle(date: .abbreviated, time: .shortened))
                     .font(.caption)
