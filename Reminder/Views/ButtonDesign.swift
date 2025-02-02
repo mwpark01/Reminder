@@ -42,7 +42,7 @@ struct ButtonDesign: View {
                                 Text(String(counts.expectedDayCount))
                             } else if tag == 2 {
                                 Text(String(counts.allCount))
-                            } else {
+                            } else if tag == 3 {
                                 Text(String(counts.completedWorkCount))
                             }
                         }

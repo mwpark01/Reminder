@@ -16,17 +16,19 @@ final class Work {
     var isDeleted: Bool
     var dueDate: Date
     var createdAt: Date
+    var myList: String
     
     init(title: String = "",
          memo: String = "",
          isCompleted: Bool = false,
          dueDate: Date = Date(),
-         createdAt: Date = Date(), isDeleted: Bool = false) {
+         createdAt: Date = Date(), isDeleted: Bool = false, myList: String = "") {
         self.title = title
         self.isCompleted = isCompleted
         self.memo = memo
         self.dueDate = dueDate
         self.createdAt = createdAt
         self.isDeleted = isDeleted
+        self.myList = myList
     }
 }

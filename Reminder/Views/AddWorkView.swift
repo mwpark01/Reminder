@@ -22,6 +22,7 @@ struct AddWorkView: View {
     @State private var memo: String
     @State private var dueDate: Date
     @State private var selectedMyList: MyList?
+    @State private var selectedImage: String = ""
     
     init(title: String = "", memo: String = "", dueDate: Date = Date()) {
         self.title = title
@@ -46,10 +47,26 @@ struct AddWorkView: View {
                     }))
                 }
                 
-                Section {
-                    Picker("목록", selection: $selectedMyList) {
+                Section() {
+                    Picker(selection: $selectedMyList) {
                         Text("선택안함").tag(Optional<MyList>.none)
-
+                        ForEach(myLists) { myList in
+                            Text(myList.content).tag(Optional(myList))
+                        }
+                    } label: {
+                        HStack {
+                            Circle()
+                                .frame(width: 30, height: 30)
+                                .foregroundStyle(selectedMyList?.setColor ?? .white)
+                                .overlay(content: {
+                                    Image(systemName: selectedMyList?.setSystemImages ?? "circle.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .foregroundStyle(.white)
+                                        .frame(width: 20, height: 20)
+                                })
+                            Text("목록")
+                        }
                     }
                 }
             }
@@ -65,8 +82,7 @@ struct AddWorkView: View {
                         if title.isEmpty {
                             title = "새로운 미리 알림 \(counts.allCount + 1)"
                         }
-                        let work = Work(title: title, memo: memo, dueDate: dueDate)
-                        
+                        let work = Work(title: title, memo: memo, dueDate: dueDate, myList: selectedMyList?.content ?? "")
                         modelContext.insert(work)
                         reloadData()
                         dismiss()

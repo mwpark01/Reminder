@@ -17,22 +17,25 @@ struct DetailView: View {
     @State private var tag: Int
     @State private var title: String
     @State private var titleColor: [Color] = [.blue, .red, .black, .gray]
+    @State private var listColor: Color
     @EnvironmentObject var counts: Counts
     
-    init(tag: Int) {
+    init(tag: Int, title: String = "", listColor: Color = .blue) {
         self.tag = tag
+        self.listColor = listColor
         
         switch tag {
         case 0:
-            title = "오늘"
+            self.title = "오늘"
         case 1:
-            title = "예정"
+            self.title = "예정"
         case 2:
-            title = "전체"
+            self.title = "전체"
         case 3:
-            title = "완료됨"
+            self.title = "완료됨"
         default:
-            title = "제목"
+            self.title = title
+            
         }
         
         let predicate = #Predicate<Work> {
@@ -47,7 +50,7 @@ struct DetailView: View {
                 HStack {
                     Text(title)
                         .font(.largeTitle)
-                        .foregroundStyle(titleColor[tag])
+                        .foregroundStyle(tag < 4 ? titleColor[tag] : listColor)
                         .fontWeight(.bold)
                     Spacer()
                 }
@@ -95,12 +98,12 @@ struct DetailView: View {
                 return Calendar.current.isDateInToday($0.dueDate) == true
             case 1:
                 return $0.dueDate > Date()
+            case 2:
+                return true
             case 3:
                 return $0.isCompleted == true
-            case 4:
-                return true
             default:
-                return true
+                return $0.myList == title
             }
         }
         return filteredWorks

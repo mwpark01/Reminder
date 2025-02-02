@@ -14,9 +14,10 @@ struct MyListView: View {
     var body: some View {
         ForEach(myLists) { myList in
             Button(action: {}, label: {
-                NavigationLink(destination: DetailView(tag: 5)) {
+                NavigationLink(destination: DetailView(tag: 4, title: myList.content, listColor: myList.setColor)) {
                     Circle()
                         .frame(width: 30, height: 30)
+                        .foregroundStyle(myList.setColor)
                         .overlay(content: {
                             Image(systemName: myList.setSystemImages)
                                 .resizable()
@@ -25,7 +26,7 @@ struct MyListView: View {
                                 .frame(width: 20, height: 20)
                         })
                     Text(myList.content)
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(.black)
                     Spacer()
                 }
             })
@@ -35,8 +36,4 @@ struct MyListView: View {
             .clipShape(.rect(cornerRadius: 10))
         }
     }
-}
-
-#Preview {
-    MyListView()
 }

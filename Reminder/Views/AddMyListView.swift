@@ -7,19 +7,31 @@
 
 import SwiftUI
 import SwiftData
+import Foundation
 
 struct AddMyListView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
     @State private var colors: [Color] = [.red, .orange, .yellow, .green, .blue, .indigo, .purple, .pink, .gray]
+    @State private var hexColors: [String] = [
+        "#FF0000",  // red
+        "#FFA500",  // orange
+        "#FFFF00",  // yellow
+        "#008000",  // green
+        "#0000FF",  // blue
+        "#4B0082",  // indigo
+        "#800080",  // purple
+        "#FF0066",  // pink
+        "#808080"   // gray
+    ]
     @State private var systemImages: [String] = ["face.smiling", "list.bullet", "bookmark.fill", "gift.fill", "birthday.cake.fill", "graduationcap.fill", "backpack.fill", "pencil.and.ruler.fill", "document.fill"]
     
     @State private var setSystemImages: String = "face.smiling"
     @State private var setColor: Color = .blue
     @State private var content: String = ""
+    @State private var selectedIndex: Int = 0
     
-    @Query private var works: [Work]
     @Query private var myLists: [MyList]
     
     var body: some View {
@@ -59,6 +71,7 @@ struct AddMyListView: View {
                         ForEach(colors, id: \.self) { color in
                             Button(action: {
                                 setColor = color
+                                selectedIndex = colors.firstIndex(of: color)!
                             }, label: {
                                 Circle()
                                     .fill(color)
@@ -115,8 +128,8 @@ struct AddMyListView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("완료") {
-                        // Color 값을 String으로 바꿔야함.
-                        let myList = MyList(content: content, setColor: "color", setSystemImages: setSystemImages)
+                        let rgb = hexStringToRGB(hex: hexColors[selectedIndex]) ?? (0, 0, 0)
+                        let myList = MyList(content: content, setSystemImages: setSystemImages, r: rgb.r, g: rgb.g, b: rgb.b)
                         modelContext.insert(myList)
                         dismiss()
                     }
@@ -125,7 +138,31 @@ struct AddMyListView: View {
             }
         }
     }
+    // HEX 색 문자열을 CGFloat으로 변환하는 함수
+    func hexStringToRGB(hex: String) -> (r: CGFloat, g: CGFloat, b: CGFloat)? {
+        // "#" 제거
+        var cleanedHex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        cleanedHex = cleanedHex.replacingOccurrences(of: "#", with: "")
+        
+        // 유효한 6자리 또는 8자리 HEX 코드인지 확인
+        guard cleanedHex.count == 6 else {
+            print("잘못된 HEX 코드")
+            return nil
+        }
+        
+        // HEX 값을 정수형으로 변환
+        if let hexNumber = Int(cleanedHex, radix: 16) {
+            // 각 색상 (r, g, b)을 비트 연산으로 추출하고, 255로 나누어 0~1 사이로 변환
+            let r = CGFloat((hexNumber & 0xFF0000) >> 16) / 255.0
+            let g = CGFloat((hexNumber & 0x00FF00) >> 8) / 255.0
+            let b = CGFloat(hexNumber & 0x0000FF) / 255.0
+            
+            return (r, g, b)
+        }
+        return nil
+    }
 }
+
 #Preview {
     AddMyListView()
 }

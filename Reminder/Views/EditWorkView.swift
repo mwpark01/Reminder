@@ -14,12 +14,14 @@ struct EditWorkView: View {
     
     @EnvironmentObject var counts: Counts
     @Query private var works: [Work]
+    @Query private var myLists: [MyList]
     var _work: Work
     
     @State private var title: String
     @State private var memo: String
     @State private var dueDate: Date
     @State var editMode: Int
+    @State private var selectedMyList: MyList?
     
     init(_work: Work, editMode: Int = 0) {
         self._work = _work
@@ -36,6 +38,7 @@ struct EditWorkView: View {
                     TextField("제목", text: $title)
                     TextField("메모", text: $memo)
                 }
+                
                 Section {
                     DatePicker("마감일",
                                selection: Binding(get: {
@@ -43,6 +46,29 @@ struct EditWorkView: View {
                     }, set: {
                         dueDate = $0
                     }))
+                }
+                
+                Section() {
+                    Picker(selection: $selectedMyList) {
+                        Text("선택안함").tag(Optional<MyList>.none)
+                        ForEach(myLists) { myList in
+                            Text(myList.content).tag(Optional(myList))
+                        }
+                    } label: {
+                        HStack {
+                            Circle()
+                                .frame(width: 30, height: 30)
+                                .foregroundStyle(selectedMyList?.setColor ?? Color.white)
+                                .overlay(content: {
+                                    Image(systemName: selectedMyList?.setSystemImages ?? "circle.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .foregroundStyle(.white)
+                                        .frame(width: 20, height: 20)
+                                })
+                            Text("목록")
+                        }
+                    }
                 }
             }
             .navigationTitle("세부사항")
@@ -60,6 +86,7 @@ struct EditWorkView: View {
                         _work.title = title
                         _work.memo = memo
                         _work.dueDate = dueDate
+                        _work.myList = selectedMyList?.content ?? ""
                         reloadData()
                         dismiss()
                     }

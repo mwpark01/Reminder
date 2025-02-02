@@ -52,8 +52,8 @@ struct ContentView: View {
                     }
                     
                     VStack {
-                        MyListView()
-                        RecentDeletedView()
+                            MyListView()
+                            RecentDeletedView()
                     }
                     Spacer()
                     Spacer()
@@ -82,7 +82,6 @@ struct ContentView: View {
                 .sheet(isPresented: $isAddingList) {
                     AddMyListView()
                 }
-                
             }
             .ignoresSafeArea()
         }
