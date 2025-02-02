@@ -15,13 +15,13 @@ struct AddMyListView: View {
     
     @State private var colors: [Color] = [.red, .orange, .yellow, .green, .blue, .indigo, .purple, .pink, .gray]
     @State private var hexColors: [String] = [
-        "#FF0000",  // red
-        "#FFA500",  // orange
-        "#FFFF00",  // yellow
-        "#008000",  // green
-        "#0000FF",  // blue
-        "#4B0082",  // indigo
-        "#800080",  // purple
+        "#FC2125",  // red
+        "#FD8206",  // orange
+        "#FEC30B",  // yellow
+        "#30C048",  // green
+        "#0B5FFE",  // blue
+        "#463BCD",  // indigo
+        "#9D33D6",  // purple
         "#FF0066",  // pink
         "#808080"   // gray
     ]
@@ -30,7 +30,7 @@ struct AddMyListView: View {
     @State private var setSystemImages: String = "face.smiling"
     @State private var setColor: Color = .blue
     @State private var content: String = ""
-    @State private var selectedIndex: Int = 0
+    @State private var selectedIndex: Int = 4
     
     @Query private var myLists: [MyList]
     

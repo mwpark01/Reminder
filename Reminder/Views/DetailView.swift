@@ -18,6 +18,7 @@ struct DetailView: View {
     @State private var title: String
     @State private var titleColor: [Color] = [.blue, .red, .black, .gray]
     @State private var listColor: Color
+    
     @EnvironmentObject var counts: Counts
     
     init(tag: Int, title: String = "", listColor: Color = .blue) {

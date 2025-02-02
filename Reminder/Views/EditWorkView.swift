@@ -50,9 +50,19 @@ struct EditWorkView: View {
                 
                 Section() {
                     Picker(selection: $selectedMyList) {
-                        Text("선택안함").tag(Optional<MyList>.none)
+                        /*에러*/
+                        if _work.myList == "" {
+                            Text("선택안함").tag(Optional<MyList>.none)
+                        } else {
+                            Text(_work.myList).tag(Optional<MyList>.none)
+                        }
                         ForEach(myLists) { myList in
-                            Text(myList.content).tag(Optional(myList))
+                            if _work.myList == myList.content {
+                                Text("선택안함").tag(Optional<MyList>.none)
+                            }
+                            else {
+                                Text(myList.content).tag(Optional(myList))
+                            }
                         }
                     } label: {
                         HStack {

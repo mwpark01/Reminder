@@ -53,7 +53,6 @@ struct ContentView: View {
                     
                     VStack {
                             MyListView()
-                            RecentDeletedView()
                     }
                     Spacer()
                     Spacer()
