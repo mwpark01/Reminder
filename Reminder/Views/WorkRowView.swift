@@ -14,6 +14,7 @@ struct WorkRowView: View {
     @State private var content: String = ""
     @State private var isEditingDetail: Bool = false
     @State private var isDeleting: Bool
+    
     init(work: Work, isDeleting: Bool = false) {
         self.work = work
         self.isDeleting = isDeleting

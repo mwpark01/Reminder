@@ -15,13 +15,13 @@ struct EditWorkView: View {
     @EnvironmentObject var counts: Counts
     @Query private var works: [Work]
     @Query private var myLists: [MyList]
-    var _work: Work
     
+    @State private var _work: Work
     @State private var title: String
     @State private var memo: String
     @State private var dueDate: Date
-    @State var editMode: Int
-    @State var selectedMyList: MyList?
+    @State private var editMode: Int
+    @State private var selectedMyList: MyList?
     
     init(_work: Work, editMode: Int = 0) {
         self._work = _work

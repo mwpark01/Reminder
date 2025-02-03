@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var buttonContents: [String] = ["오늘", "예정", "전체", "완료됨"]
     @State private var buttonColors: [Color] = [.blue, .red, .gray, .gray]
     @State private var imageStrings: [String] = ["calendar.circle.fill", "calendar.circle.fill", "tray.circle.fill", "checkmark.circle.fill"]
-    private var gridItems = [GridItem(.flexible()),
+    @State private var gridItems = [GridItem(.flexible()),
                              GridItem(.flexible())]
     
     var body: some View {

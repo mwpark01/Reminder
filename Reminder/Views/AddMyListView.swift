@@ -26,7 +26,6 @@ struct AddMyListView: View {
         "#808080"   // gray
     ]
     @State private var systemImages: [String] = ["face.smiling", "list.bullet", "bookmark.fill", "gift.fill", "birthday.cake.fill", "graduationcap.fill", "backpack.fill", "pencil.and.ruler.fill", "document.fill"]
-    
     @State private var setSystemImages: String = "face.smiling"
     @State private var setColor: Color = .blue
     @State private var content: String = ""
