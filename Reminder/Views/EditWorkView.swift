@@ -21,7 +21,7 @@ struct EditWorkView: View {
     @State private var memo: String
     @State private var dueDate: Date
     @State var editMode: Int
-    @State private var selectedMyList: MyList?
+    @State var selectedMyList: MyList?
     
     init(_work: Work, editMode: Int = 0) {
         self._work = _work
@@ -50,19 +50,9 @@ struct EditWorkView: View {
                 
                 Section() {
                     Picker(selection: $selectedMyList) {
-                        /*에러*/
-                        if _work.myList == "" {
-                            Text("선택안함").tag(Optional<MyList>.none)
-                        } else {
-                            Text(_work.myList).tag(Optional<MyList>.none)
-                        }
+                        Text("선택안함").tag(Optional<MyList>.none)
                         ForEach(myLists) { myList in
-                            if _work.myList == myList.content {
-                                Text("선택안함").tag(Optional<MyList>.none)
-                            }
-                            else {
-                                Text(myList.content).tag(Optional(myList))
-                            }
+                            Text(myList.content).tag(Optional(myList))
                         }
                     } label: {
                         HStack {
@@ -77,6 +67,14 @@ struct EditWorkView: View {
                                         .frame(width: 20, height: 20)
                                 })
                             Text("목록")
+                        }
+                    }
+                    .onAppear {
+                        if let selectedItem = myLists.first(where: { $0.content == _work.myList }) {
+                            selectedMyList = selectedItem
+                        } else {
+                            // 해당 항목이 없을 경우 처리
+                            selectedMyList = nil
                         }
                     }
                 }

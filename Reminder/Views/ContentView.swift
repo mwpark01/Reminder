@@ -23,6 +23,7 @@ struct ContentView: View {
     @State private var imageStrings: [String] = ["calendar.circle.fill", "calendar.circle.fill", "tray.circle.fill", "checkmark.circle.fill"]
     private var gridItems = [GridItem(.flexible()),
                              GridItem(.flexible())]
+    
     var body: some View {
         NavigationStack {
             ZStack {
