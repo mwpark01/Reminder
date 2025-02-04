@@ -10,7 +10,7 @@ import SwiftData
 
 struct MyListView: View {
     @Environment(\.modelContext) private var modelContext
-    
+    @EnvironmentObject var counts: Counts
     @Query private var works: [Work]
     @Query private var myLists: [MyList]
     
@@ -22,13 +22,16 @@ struct MyListView: View {
         VStack {
             NavigationStack {
                 List {
-                    NavigationLink(destination: DeleteView()) {
-                        RecentDeletedView()
+                    if counts.deletedWorkCount > 0 {
+                        NavigationLink(destination: DeleteView()) {
+                            RecentDeletedView()
+                        }
                     }
+                    
                     ForEach(myLists) { myList in
                         
                         @State var filteringLists = works.filter {
-                            $0.myList == myList.content
+                            ($0.myList == myList.content) && ($0.isDeleted == false)
                         }
                         
                         NavigationLink(destination: DetailView(tag: 4, title: myList.content, listColor: myList.setColor)) {
