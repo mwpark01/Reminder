@@ -36,6 +36,9 @@ struct ContentView: View {
                         .padding(.top)
                         .font(.largeTitle)
                         .fontWeight(.bold)
+                        .onAppear() {
+                            reloadData()
+                        }
                     
                     LazyVGrid(columns: gridItems, spacing: 1) {
                         ForEach((0...3), id: \.self) { index in
@@ -86,6 +89,35 @@ struct ContentView: View {
             .ignoresSafeArea()
         }
     }
+    
+    func reloadData() {
+        print("메인 화면")
+        let current = Calendar.current
+        counts.allCount = 0
+        counts.completedWorkCount = 0
+        counts.expectedDayCount = 0
+        counts.todayCount = 0
+        counts.deletedWorkCount = 0
+        
+        for work in works {
+            if work.isDeleted {
+                counts.deletedWorkCount += 1
+                print(counts.deletedWorkCount)
+            } else {
+                counts.allCount += 1
+                if work.isCompleted {
+                    counts.completedWorkCount += 1
+                }
+                if current.isDateInToday(work.dueDate) {
+                    counts.todayCount += 1
+                }
+                if work.dueDate > Date() {
+                    counts.expectedDayCount += 1
+                }
+            }
+        }
+    }
+
 }
 
 #Preview {
@@ -93,5 +125,4 @@ struct ContentView: View {
         .modelContainer(for: [Work.self, MyList.self], inMemory: true)
         .environmentObject(Counts())
 }
-
 
