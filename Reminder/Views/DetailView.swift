@@ -88,6 +88,7 @@ struct DetailView: View {
         withAnimation {
             for index in offsets {
                 works[index].isDeleted = true
+                works[index].deletedAt = Date()
             }
             reloadData()
         }

@@ -16,6 +16,7 @@ final class Work {
     var isDeleted: Bool
     var dueDate: Date
     var createdAt: Date
+    var deletedAt: Date?
     var myList: String
     
     init(title: String = "",

@@ -64,6 +64,9 @@ struct DeleteView: View {
             }
             Spacer()
         }
+        .onAppear(perform: {
+            // TODO: 30일이 지나면 자동으로 삭제되는 코드 추가
+        })
     }
 }
 
